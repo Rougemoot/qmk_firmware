@@ -29,7 +29,7 @@ enum layers {
   _NAV,
   _NUM,
   _MEDIA,
-  _FUNC
+  _FUNCT
 };
 
 enum custom_keycodes {
@@ -45,7 +45,7 @@ enum custom_keycodes {
   E_CIRC,
   A_GRV,
   U_GRV,
-}
+};
 
 // --------------- }}}
 
@@ -86,14 +86,14 @@ bool accented_letter(uint16_t accent, uint16_t letter) {
 #define NAV   MO(_NAV) 
 #define NUM   MO(_NUM) 
 #define MEDIA MO(_MEDIA)
-#define FUNC  MO(_FUNC) 
+#define FUNCT  MO(_FUNCT) 
 
 // Accented letters
 #define C_CED   RALT(KC_C)
 #define DED_CIR RALT(KC_I)
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  uint8_t mod_state = get_mods()
+  uint8_t mod_state = get_mods();
   switch (keycode) {
 
     // Undead characters
@@ -117,7 +117,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return accented_letter(KC_GRV, KC_A);
     case U_GRV:
       return accented_letter(KC_GRV, KC_U);
+    default:
+      return true;
 
+    break;
   }
 }
 
@@ -134,8 +137,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   TAB_MEH, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    MEDIA, \
   ESC_FN,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFT_ENT, \
-  KC_LCTL, KC_LALT, KC_LGUI, NUM,     NAV,     LOWER,   RAISE,   KC_SPC,  KC_BSPC, FUNC,    _______, _______ \   
-)
+  KC_LCTL, KC_LALT, KC_LGUI, NUM,     NAV,     LOWER,   RAISE,   KC_SPC,  KC_BSPC, FUNCT,   _______, _______ \
+),
 // -------------------- }}}
 
 // ---- RAISE ---- {{{
@@ -144,7 +147,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, \
   _______, KC_GRV,  _______, C_CED,   _______, _______, _______, _______, KC_LCBR, KC_RCBR, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______  \
-)
+),
 // --------------- }}}
 
 // ---- LOWER ---- {{{
@@ -153,7 +156,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_1,    KC_2   , KC_3   , KC_4   , KC_5   , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_BSLS, \
   _______, KC_TILD, _______, _______, _______, _______, _______, _______, _______, KC_LBRC, KC_RBRC, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ \
-)
+),
 // --------------- }}}
 
 // ---- NAV ---- {{{
@@ -162,7 +165,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL,  _______, _______, _______ \
-)
+),
 // --------------- }}}
 
 // ---- NUM ---- {{{
@@ -171,7 +174,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, _______, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, _______, \
   _______, _______, _______, _______, _______, _______, KC_PEQL, KC_P1,   KC_P2,   KC_P3,   KC_PENT, _______, \
   _______, _______, _______, _______, _______, _______, KC_SPC,  KC_P0,   KC_PCMM, KC_PDOT, _______, _______ \
-)
+),
 // --------------- }}}
 
 // ---- MEDIA ---- {{{
@@ -180,11 +183,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_BRID, KC_VOLD, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_MUTE, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_MFFD, KC_MPLY, KC_MRWD \
-)
+),
 // --------------- }}}
 
-// ---- FUNC ---- {{{
-[_FUNC] = LAYOUT_ortho_4x12( \
+// ---- FUNCT ---- {{{
+[_FUNCT] = LAYOUT_ortho_4x12( \
   KC_F10,  KC_F11,  KC_F12,  _______, _______, _______, _______, _______, _______, _______, _______, _______, \
   KC_F7,   KC_F8,   KC_F9,   _______, _______, _______, _______, KC_RGUI, KC_RALT, KC_RCTL, KC_RSFT, _______, \
   KC_F4,   KC_F5,   KC_F6,   _______, _______, _______, _______, _______, _______, _______, _______, _______, \
@@ -192,6 +195,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 )
 // --------------- }}}
 
-}
+};
 
 // ------------------------------------------- }}}
