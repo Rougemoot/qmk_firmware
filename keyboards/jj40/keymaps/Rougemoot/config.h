@@ -1,4 +1,3 @@
-// #define FORCE_NKRO
 #undef FORCE_NKRO
 #define FORCE_NKRO
 

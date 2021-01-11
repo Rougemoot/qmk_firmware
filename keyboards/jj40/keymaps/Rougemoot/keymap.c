@@ -6,12 +6,15 @@
 
 // Mandatory
 #include QMK_KEYBOARD_H
+#include "virtser.h"
 
+/*
 // Steno stuff
 #include "keymap_steno.h"
 void matrix_init_user() {
     steno_set_mode(STENO_MODE_GEMINI);
 }
+*/
 
 // ----------------- }}}
 
@@ -76,7 +79,7 @@ bool accented_letter(uint16_t accent, uint16_t letter, bool pressed, uint8_t mod
 // Modtaps
 #define ESC_FN MT(MOD_HYPR, KC_ESC)
 #define TAB_MEH MEH_T(KC_TAB)
-#define SFT_ENT RSFT_T(KC_ENT)
+#define SFT_UP RSFT_T(KC_UP)
 
 // Home row mods
 #define SFT_A MT(MOD_LSFT, KC_A)
@@ -95,9 +98,9 @@ bool accented_letter(uint16_t accent, uint16_t letter, bool pressed, uint8_t mod
 #define NAV   MO(_NAV) 
 #define NUM   MO(_NUM) 
 #define MEDIA LT(_MEDIA, KC_ENT)
-#define FUNCT MO(_FUNCT) 
+#define FUNCT LT(_FUNCT, KC_LEFT)
 
-// Accented letters
+// Accented letters {{{
 #define C_CED   RALT(KC_C)
 #define DED_CIR RALT(KC_I)
 
@@ -132,6 +135,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     break;
   }
 }
+// }}}
 
 // --------------------- }}}
 
@@ -158,8 +162,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_BASE] = LAYOUT_ortho_4x12( \
   TAB_MEH, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    MEDIA,
   ESC_FN,  SFT_A,   CTL_S,   ALT_D,   CMD_F,   KC_G,    KC_H,    CMD_J,   ALT_K,   CTL_L,   SFT_SC,  UD_APO,
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-  KC_LCTL, KC_LALT, KC_LGUI, NUM,     NAV,     LOWER,   RAISE,   KC_SPC,  KC_BSPC, FUNCT,   NK_TOGG, _______
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, SFT_UP,
+  KC_LCTL, KC_LALT, KC_LGUI, NUM,     NAV,     LOWER,   RAISE,   KC_SPC,  KC_BSPC, FUNCT,   KC_DOWN, KC_RGHT
 ),
 // -------------------- }}}
 
@@ -195,7 +199,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, _______, _______, _______, KC_PSLS, KC_P7,   KC_P8,   KC_P9,   KC_PMNS, KC_BSPC, \
   _______, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, _______, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, _______, \
   _______, _______, _______, _______, _______, _______, KC_PEQL, KC_P1,   KC_P2,   KC_P3,   KC_PENT, _______, \
-  _______, _______, _______, _______, _______, _______, KC_SPC,  KC_P0,   KC_PCMM, KC_PDOT, _______, _______ \
+  _______, _______, _______, _______, _______, _______, KC_SPC,  KC_P0,   KC_BSPC, KC_PDOT, _______, _______ \
 ),
 // --------------- }}}
 
@@ -223,9 +227,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
-),
+)
 // ---------------- }}}
 
+/*
 // ---- STENO ---- {{{
 [_STENO] = LAYOUT_ortho_4x12(
   XXXXXXX, XXXXXXX, STN_N3,  STN_N4,  STN_N5,  XXXXXXX, XXXXXXX, STN_N8,  STN_N9,  STN_NA,  XXXXXXX, XXXXXXX,
@@ -234,6 +239,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, STN_A,   STN_O,   STN_E,   STN_U,   XXXXXXX, XXXXXXX, XXXXXXX, BASE
 )
 // ---------------- }}}
+*/
 
 };
 
