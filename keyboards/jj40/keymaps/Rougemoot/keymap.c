@@ -137,6 +137,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 // }}}
 
+// Combos {{{
+
+enum combo_events {
+  ER_ACUTE,
+  EW_GRAVE
+};
+
+const uint16_t PROGMEM acute_e_combo[] = {KC_E, KC_R, COMBO_END};
+const uint16_t PROGMEM grave_e_combo[] = {KC_E, KC_W, COMBO_END};
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+  uint8_t mod_state = get_mods();
+  switch(combo_index) {
+    case ER_ACUTE:
+      accented_letter(KC_QUOT, KC_E, pressed, mod_state);
+      break;
+    case EW_GRAVE:
+      accented_letter(KC_GRV, KC_E, pressed, mod_state);
+      break;
+  }
+}
+
+// }}}
+
 // --------------------- }}}
 
 // ------------------------------------------- }}}
