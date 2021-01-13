@@ -140,21 +140,65 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // Combos {{{
 
 enum combo_events {
-  ER_ACUTE,
-  EW_GRAVE
+  ER_E_ACUTE,
+  EW_E_GRAVE,
+  WER_E_CIRC,
+  OU_GRV,
+  UIO_I_CIRC,
+  IOP_O_CIRC,
+  AS_A_GRV,
+  I_CAPS
 };
 
 const uint16_t PROGMEM acute_e_combo[] = {KC_E, KC_R, COMBO_END};
 const uint16_t PROGMEM grave_e_combo[] = {KC_E, KC_W, COMBO_END};
+const uint16_t PROGMEM circ_e_combo[]  = {KC_E, KC_W, KC_R, COMBO_END};
+const uint16_t PROGMEM ou_grave_combo[] = {KC_O, KC_U, COMBO_END};
+const uint16_t PROGMEM i_circ_combo[] = {KC_U, KC_I, KC_O, COMBO_END};
+const uint16_t PROGMEM o_circ_combo[] = {KC_I, KC_O, KC_P, COMBO_END};
+const uint16_t PROGMEM a_grave_combo[] = {KC_A, KC_S, COMBO_END};
+const uint16_t PROGMEM capitalised_i[] = {KC_A, KC_I, COMBO_END};
+
+combo_t key_combos[COMBO_COUNT] = {
+  [ER_E_ACUTE] = COMBO_ACTION(acute_e_combo),
+  [EW_E_GRAVE] = COMBO_ACTION(grave_e_combo),
+  [WER_E_CIRC] = COMBO_ACTION(circ_e_combo),
+  [OU_GRV] = COMBO_ACTION(ou_grave_combo),
+  [UIO_I_CIRC] = COMBO_ACTION(i_circ_combo),
+  [IOP_O_CIRC] = COMBO_ACTION(o_circ_combo),
+  [AS_A_GRV] = COMBO_ACTION(a_grave_combo),
+  [I_CAPS] = COMBO_ACTION(capitalised_i)
+};
 
 void process_combo_event(uint16_t combo_index, bool pressed) {
   uint8_t mod_state = get_mods();
   switch(combo_index) {
-    case ER_ACUTE:
+    case ER_E_ACUTE:
       accented_letter(KC_QUOT, KC_E, pressed, mod_state);
       break;
-    case EW_GRAVE:
+    case EW_E_GRAVE:
       accented_letter(KC_GRV, KC_E, pressed, mod_state);
+      break;
+    case WER_E_CIRC:
+      accented_letter(S(KC_6), KC_E, pressed, mod_state);
+      break;
+    case OU_GRV:
+      if (pressed) {
+        tap_code(KC_O);
+        accented_letter(KC_GRV, KC_U, pressed, mod_state);
+      }
+      break;
+    case UIO_I_CIRC:
+      accented_letter(S(KC_6), KC_I, pressed, mod_state);
+      break;
+    case IOP_O_CIRC:
+      accented_letter(S(KC_6), KC_O, pressed, mod_state);
+      break;
+    case AS_A_GRV:
+      accented_letter(KC_GRV, KC_A, pressed, mod_state);
+      break;
+    case I_CAPS:
+      tap_code16(S(KC_I));
       break;
   }
 }

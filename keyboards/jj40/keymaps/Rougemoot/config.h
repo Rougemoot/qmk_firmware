@@ -7,5 +7,5 @@
 #define TAPPING_TERM 200
 
 // Combos
-#define COMBO_COUNT 2
-#define COMBO_TERM 100
+#define COMBO_COUNT 8
+#define COMBO_TERM 30
