@@ -27,7 +27,8 @@ def _check_modules(requirements):
                 line = line.split('#')[0]
 
             module = dict()
-            module['name'] = module['import'] = line.split('=')[0] if '=' in line else line
+            module['name'] = line.split('=')[0] if '=' in line else line
+            module['import'] = module['name'].replace('-', '_')
 
             # Not every module is importable by its own name.
             if module['name'] == "pep8-naming":
@@ -72,7 +73,10 @@ def main():
     """
     # Change to the root of our checkout
     os.environ['ORIG_CWD'] = os.getcwd()
+    os.environ['DEPRECATED_BIN_QMK'] = '1'
     os.chdir(qmk_dir)
+
+    print('Warning: The bin/qmk script is being deprecated. Please install the QMK CLI: python3 -m pip install qmk', file=sys.stderr)
 
     # Import the subcommands
     import qmk.cli  # noqa

@@ -109,16 +109,31 @@ These configuration settings can be set in your `config.h` file.
 ## Combo Term
 By default, the timeout for the Combos to be recognized is set to 50ms. This can be changed if accidental combo misfires are happening or if you're having difficulties pressing keys at the same time. For instance, `#define COMBO_TERM 40` would set the timeout period for combos to 40ms.
 
+<<<<<<< HEAD
 ## Long Combos
+=======
+## Buffer and state sizes
+>>>>>>> 9495ed61a7ca41c9479c3adf1e43f1ee7e37d497
 If you're using long combos, or you have a lot of overlapping combos, you may run into issues with this, as the buffers may not be large enough to accommodate what you're doing. In this case, you can configure the sizes of the buffers used. Be aware, larger combo sizes and larger buffers will increase memory usage!
 
 To configure the amount of keys a combo can be composed of, change the following:
 
+<<<<<<< HEAD
 | Keys | Define to be set     |
 |------|----------------------|
 | 8    | QMK Default          |
 | 16   | `#define EXTRA_LONG_COMBOS`  |
 | 32   | `#define EXTRA_EXTRA_LONG_COMBOS`|
+=======
+| Keys | Define to be set                  |
+|------|-----------------------------------|
+| 6    | `#define EXTRA_SHORT_COMBOS`      |
+| 8    | QMK Default                       |
+| 16   | `#define EXTRA_LONG_COMBOS`       |
+| 32   | `#define EXTRA_EXTRA_LONG_COMBOS` |
+
+Defining `EXTRA_SHORT_COMBOS` combines a combo's internal state into just one byte. This can, in some cases, save some memory. If it doesn't, no point using it. If you do, you also have to make sure you don't define combos with more than 6 keys.
+>>>>>>> 9495ed61a7ca41c9479c3adf1e43f1ee7e37d497
 
 Processing combos has two buffers, one for the key presses, another for the combos being activated. Use the following options to configure the sizes of these buffers:
 
@@ -127,6 +142,7 @@ Processing combos has two buffers, one for the key presses, another for the comb
 | `#define COMBO_BUFFER_LENGTH 4`     | 4                                                    |
 
 ## Modifier Combos
+<<<<<<< HEAD
 If a combo resolves to a Modifier, the window for processing the combo can be extended independently from normal combos. By default, this is disabled but can be enabled with `#define COMBO_MUST_HOLD_MODS`, and the time window can be configured with `#define COMBO_MOD_TERM 150` (default: 200). With `COMBO_MUST_HOLD_MODS`, you cannot tap the combo any more which makes the combo less prone to misfires.
 
 ## Per Combo Timing and Holding
@@ -138,16 +154,35 @@ Instead of using a blanket `COMBO_TERM` window for every combo, per-combo timing
 | `COMBO_TERM_PER_COMBO`      | uint16_t get_combo_term(uint16_t index, combo_t \*combo)  | Optional per-combo timeout window. (default: COMBO_TERM)                                             |
 
 If you set either of these options but would like to keep the Modifier Combo settings, you have to define those yourself in the function.
+=======
+If a combo resolves to a Modifier, the window for processing the combo can be extended independently from normal combos. By default, this is disabled but can be enabled with `#define COMBO_MUST_HOLD_MODS`, and the time window can be configured with `#define COMBO_HOLD_TERM 150` (default: `TAPPING_TERM`). With `COMBO_MUST_HOLD_MODS`, you cannot tap the combo any more which makes the combo less prone to misfires.
+
+## Per Combo Timing, Holding and Tapping
+For each combo, it is possible to configure the time window it has to pressed in, if it needs to be held down, or if it needs to be tapped.
+
+For example, tap-only combos are useful if any (or all) of the underlying keys is a Mod-Tap or a Layer-Tap key. When you tap the combo, you get the combo result. When you press the combo and hold it down, the combo doesn't actually activate. Instead the keys are processed separately as if the combo wasn't even there.
+
+In order to use these features, the following configuration options and functions need to be defined. Coming up with useful timings and configuration is left as an exercise for the reader.
+
+| Config Flag                 | Function                                                  | Description                                                                                            |
+|-----------------------------|-----------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| `COMBO_TERM_PER_COMBO`      | uint16_t get_combo_term(uint16_t index, combo_t \*combo)  | Optional per-combo timeout window. (default: `COMBO_TERM`)                                             |
+| `COMBO_MUST_HOLD_PER_COMBO` | bool get_combo_must_hold(uint16_t index, combo_t \*combo) | Controls if a given combo should fire immediately on tap or if it needs to be held. (default: `false`) |
+| `COMBO_MUST_TAP_PER_COMBO`  | bool get_combo_must_tap(uint16_t index, combo_t \*combo)  | Controls if a given combo should fire only if tapped within `COMBO_HOLD_TERM`. (default: `false`)      |
+>>>>>>> 9495ed61a7ca41c9479c3adf1e43f1ee7e37d497
 
 Examples:
 ```c
 uint16_t get_combo_term(uint16_t index, combo_t *combo) {
     // decide by combo->keycode
+<<<<<<< HEAD
     if (KEYCODE_IS_MOD(combo->keycode)) {
         // you have to config this yourself if you're using COMBO_TERM_PER_COMBO
         return COMBO_MOD_TERM;
     }
 
+=======
+>>>>>>> 9495ed61a7ca41c9479c3adf1e43f1ee7e37d497
     switch (combo->keycode) {
         case KC_X:
             return 50;
@@ -173,7 +208,13 @@ uint16_t get_combo_term(uint16_t index, combo_t *combo) {
 bool get_combo_must_hold(uint16_t index, combo_t *combo) {
     // Same as above, decide by keycode, the combo index, or by the keys in the chord.
 
+<<<<<<< HEAD
     if (KEYCODE_IS_MOD(combo->keycode)) {
+=======
+    if (KEYCODE_IS_MOD(combo->keycode) || 
+        (combo->keycode >= QK_MOMENTARY && combo->keycode <= QK_MOMENTARY_MAX) // MO(kc) keycodes
+        ) {
+>>>>>>> 9495ed61a7ca41c9479c3adf1e43f1ee7e37d497
         return true;
     }
 
@@ -184,6 +225,29 @@ bool get_combo_must_hold(uint16_t index, combo_t *combo) {
 
     return false;
 }
+<<<<<<< HEAD
+=======
+
+bool get_combo_must_tap(uint16_t index, combo_t *combo) {
+    // If you want all combos to be tap-only, just uncomment the next line
+    // return true
+
+    // If you want *all* combos, that have Mod-Tap/Layer-Tap/Momentary keys in its chord, to be tap-only, this is for you:
+    uint16_t key;
+    uint8_t idx = 0;
+    while ((key = pgm_read_word(&combo->keys[idx])) != COMBO_END) {
+        switch (key) {
+            case QK_MOD_TAP...QK_MOD_TAP_MAX:
+            case QK_LAYER_TAP...QK_LAYER_TAP_MAX:
+            case QK_MOMENTARY...QK_MOMENTARY_MAX:
+                return true;
+        }
+        idx += 1;
+    }
+    return false;
+
+}
+>>>>>>> 9495ed61a7ca41c9479c3adf1e43f1ee7e37d497
 ```
 
 ## Variable Length Combos
@@ -219,7 +283,11 @@ This also disables the "must hold" functionalities as they just wouldn't work at
 
 ## Customizable key releases
 
+<<<<<<< HEAD
 By defining `COMBO_PROCESS_KEY_RELEASE` and implementing the function `bool process_combo_key_release(uint16_t combo_index, combo_t *combo, uint8_t key_index, uint16_t keycode)`, you can run your custom code on each key release after a combo was activated. For example you could change the RGB colors, run activate haptics, or alter the modifiers.
+=======
+By defining `COMBO_PROCESS_KEY_RELEASE` and implementing the function `bool process_combo_key_release(uint16_t combo_index, combo_t *combo, uint8_t key_index, uint16_t keycode)`, you can run your custom code on each key release after a combo was activated. For example you could change the RGB colors, activate haptics, or alter the modifiers.
+>>>>>>> 9495ed61a7ca41c9479c3adf1e43f1ee7e37d497
 
 You can also release a combo early by returning `true` from the function.
 
@@ -254,6 +322,15 @@ bool process_combo_key_release(uint16_t combo_index, combo_t *combo, uint8_t key
     return false;
 }
 ```
+<<<<<<< HEAD
+=======
+## Layer independent combos
+
+If you, for example, use multiple base layers for different key layouts, one for QWERTY, and another one for Colemak, you might want your combos to work from the same key positions on all layers. Defining the same combos again for another layout is redundant and takes more memory. The solution is to just check the keycodes from one layer.
+
+With `#define COMBO_ONLY_FROM_LAYER _LAYER_A` the combos' keys are always checked from layer `_LAYER_A` even though the active layer would be `_LAYER_B`.
+
+>>>>>>> 9495ed61a7ca41c9479c3adf1e43f1ee7e37d497
 ## User callbacks
 
 In addition to the keycodes, there are a few functions that you can use to set the status, or check it:
@@ -269,7 +346,11 @@ In addition to the keycodes, there are a few functions that you can use to set t
 # Dictionary Management
 
 Having 3 places to update when adding new combos or altering old ones does become cumbersome when you have a lot of combos. We can alleviate this with some magic! ... If you consider C macros magic.
+<<<<<<< HEAD
 First, you need to add `VPATH += keyboards/gboards` to your `rules.mk`. Next, include the file `keymap_combo.h` in your `keymap.c`.
+=======
+First, you need to add `VPATH += keyboards/gboards` to your `rules.mk`. Next, include the file `g/keymap_combo.h` in your `keymap.c`.
+>>>>>>> 9495ed61a7ca41c9479c3adf1e43f1ee7e37d497
 
 Then, write your combos in `combos.def` file in the following manner:
 
