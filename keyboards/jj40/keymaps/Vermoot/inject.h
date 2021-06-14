@@ -40,6 +40,10 @@
       break;
     case TR_TRES:
       if (pressed) { SEND_STRING("tr"); accented_letter(KC_GRV, KC_E, pressed); tap_code(KC_S); } break;
+    case ETA_ETAIT:
+      if (pressed) { accented_letter(KC_QUOT, KC_E, pressed); SEND_STRING("tait"); } break;
+    case ETAN_ETAIENT:
+      if (pressed) { accented_letter(KC_QUOT, KC_E, pressed); SEND_STRING("taient"); } break;
     // English
     case IM_IM: if (pressed) { unmod(S(KC_I)); unmod(KC_QUOT); tap_code(KC_M); } break;
     case DN_DONT: if (pressed) { SEND_STRING("don"); unmod(KC_QUOT); tap_code(KC_T); } break;

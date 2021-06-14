@@ -39,6 +39,17 @@ const keypos_t hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
   {{11, 3}, {10, 3}, {9, 3}, {8, 3}, {7, 3}, {6, 3}, {5, 3}, {4, 3}, {3, 3}, {2, 3}, {1, 3}, {0, 3}},
 };
 
+bool combo_should_trigger(uint16_t combo_index, combo_t *combo) {
+
+  bool colemak = layer_state_is(_BASE)
+  bool qwerty = layer_state_is(_QWERTY)
+
+  switch (combo_index) {
+    case EI_E_ACUTE: return colemak;
+    case ER_E_ACUTE: return qwerty;
+  }
+  return true;
+}
 
 uint16_t get_combo_term(uint16_t index, combo_t *combo) {
   if (KEYCODE_IS_MOD(combo->keycode)) { return COMBO_MOD_TERM; }
@@ -51,6 +62,7 @@ uint16_t get_combo_term(uint16_t index, combo_t *combo) {
     case ARS_A_CIRC: return 100;
     // case AR_A_GRV: return 50;
     case XC_C_CED: return 100;
+    case OU_GRV: return COMBO_TERM - 10;
     case BP_BEAUCOUP: return 50;
     case MNEI_MEME: return 100;
     case LTA_LAETITIA: return 100;
@@ -104,7 +116,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // ---- QWERTY ---- {{{
 [_QWERTY] = LAYOUT_ortho_4x12( \
   TAB_MEH, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    MEDIA,
-  ESC_FN,  SFT_A,   CTL_S,   ALT_D,   CMMD_F,   KC_G,    KC_H,    CMMD_J,   ALT_K,   CTL_L,   SFT_SC,  UD_APO,
+  ESC_FN,  SFT_A,   CTL_S,   ALT_D,   CMMD_F,  KC_G,    KC_H,    CMMD_J,  ALT_K,   CTL_L,   SFT_SC,  UD_APO,
   OSM_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
   KC_LCTL, KC_LALT, KC_LGUI, NUM,     NAV,     LOWER,   RAISE,   KC_SPC,  KC_BSPC, FUNCT,   CRN_L,   DF(_BASE)
 ),
